@@ -9,11 +9,17 @@ plugins {
 group = "com.zijian"
 version = "1.0-SNAPSHOT"
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation("jakarta.enterprise:jakarta.enterprise.cdi-api:4.0.0")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.3")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.13.2")
