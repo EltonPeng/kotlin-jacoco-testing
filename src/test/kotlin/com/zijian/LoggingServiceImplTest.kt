@@ -3,6 +3,7 @@ package com.zijian
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import mu.KLogger
+import org.junit.jupiter.api.Assertions
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -29,6 +30,14 @@ internal class LoggingServiceImplTest {
                 assertNotNull(it.newInstance(logger, 0, null))
                 assertNotNull(it.newInstance(logger, 1, null))
             }
+        }
+    }
+
+    @Test
+    fun `cover property`() {
+        assertThrows(UninitializedPropertyAccessException::class.java) {
+            val loggingServiceImpl = LoggingServiceImpl(logger)
+            println(loggingServiceImpl.target)
         }
     }
 
