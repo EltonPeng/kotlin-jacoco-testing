@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.21"
     application
-    jacoco
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 group = "com.zijian"
@@ -25,18 +25,34 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.2")
 }
 
-jacoco {
-    toolVersion = "0.8.8"
-}
-
 tasks.test {
     useJUnitPlatform()
-    finalizedBy(tasks.jacocoTestReport)
-    finalizedBy(tasks.jacocoTestCoverageVerification)
 }
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
+kover {
+    isDisabled.set(false)
+    engine.set(kotlinx.kover.api.DefaultIntellijEngine)
+
+    htmlReport {
+        onCheck.set(false)
+        reportDir.set(layout.buildDirectory.dir("reports/html-result"))
+    }
+
+    verify {
+        onCheck.set(true)
+
+        rule {
+            isEnabled = true
+            name = null
+            target = kotlinx.kover.api.VerificationTarget.ALL
+
+            bound {
+                minValue = 99
+                counter = kotlinx.kover.api.CounterType.LINE
+                valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+            }
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {
